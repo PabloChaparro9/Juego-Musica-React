@@ -9,6 +9,17 @@ function App() {
     const varAux = Math.floor(Math.random()*(0 - 14)+14)
     setIntervalos({...listaEscalas[varAux]});
   }
+  const definirNota = (a, b)=>{
+    if(a.slice(-2) == '##' && b==true){
+      return a.slice(0,2)
+    }else if(a.slice(-1) == '#' && b==true){
+      return a.slice(0,1)
+    }else if (a.slice(-2)== '##' && b==false){
+      return a.slice(0,2)
+    }else{
+      return a
+    }
+  }
   const Card = ({Nota}) =>{
     const [texto, setTexto] = useState(Nota);
     return (
@@ -16,11 +27,11 @@ function App() {
         <div>
           <h1>{texto}</h1>
           <div>
-            <button onClick={()=>{setTexto(Nota)}}>
-              {Nota}
+            <button onClick={()=>{setTexto(definirNota(Nota))}}>
+              {definirNota(Nota,true)}
             </button>
-            <button onClick={()=>{setTexto(Nota+'#')}}>
-              {Nota}#
+            <button onClick={()=>{setTexto(definirNota(Nota+'#'))}}>
+              {definirNota(Nota+'#',false)}
             </button>
           </div>
         </div>
