@@ -4,7 +4,11 @@ import { ComponenteDePrueba } from './components/ComponenteDePrueba'
 import { listaEscalas } from '../public/data/listaEscalas';
 
 function App() {
-  const [intervalos, setIntervalos] = useState([...listaEscalas[0].Intervalos]);
+  const [intervalos, setIntervalos] = useState({...listaEscalas[Math.floor(Math.random()*(0 - 14)+14)]});
+  const cambiarEscala = () => {
+    const varAux = Math.floor(Math.random()*(0 - 14)+14)
+    setIntervalos({...listaEscalas[varAux]});
+  }
   const Card = ({Nota}) =>{
     const [texto, setTexto] = useState(Nota);
     return (
@@ -23,13 +27,14 @@ function App() {
       </>
     )
   };
-const listaCards = intervalos.map(grado=> <Card key={grado} Nota={grado}></Card>);
+const listaCards = intervalos.Intervalos.map(grado=> <Card key={grado} Nota={grado}></Card>);
   return (
     <>
-      <ComponenteDePrueba></ComponenteDePrueba>
+      <ComponenteDePrueba Nombre={intervalos.Nombre}></ComponenteDePrueba>
       <div className='cards'>
         {listaCards}
       </div>
+      <button onClick={cambiarEscala}>Cambiar Escala</button>
     </>
   )
 }

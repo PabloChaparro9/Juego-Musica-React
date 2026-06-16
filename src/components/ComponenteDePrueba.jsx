@@ -1,8 +1,7 @@
-import { listaEscalas } from "../../public/data/listaEscalas"
-export const ComponenteDePrueba = () =>{
+export const ComponenteDePrueba = ({Nombre}) =>{
     return(
         <>
-            <h1>Escala de {listaEscalas[0].Nombre}</h1>
+            <h1>Escala de {Nombre}</h1>
         </>
     )
 }
