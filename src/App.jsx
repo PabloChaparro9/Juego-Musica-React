@@ -7,15 +7,23 @@ function App() {
   const [intervalos, setIntervalos] = useState({...listaEscalas[Math.floor(Math.random()*(0 - 14)+14)]});
   const cambiarEscala = () => {
     const varAux = Math.floor(Math.random()*(0 - 14)+14)
-    setIntervalos({...listaEscalas[varAux]});
+    if(listaEscalas[varAux].Tipo == document.getElementById('tipoEscala').value && listaEscalas[varAux].Nombre != listaEscalas.Nombre){
+      setIntervalos({...listaEscalas[varAux]});
+    }else{
+      cambiarEscala();
+    }
   }
   const definirNota = (a, b)=>{
     if(a.slice(-2) == '##' && b==true){
       return a.slice(0,2)
     }else if(a.slice(-1) == '#' && b==true){
       return a.slice(0,1)
+    }else if(a.slice(-1) == 'b' && b==true){
+      return a
     }else if (a.slice(-2)== '##' && b==false){
       return a.slice(0,2)
+    }else if(a.slice(-2)== 'b#' && b==false){
+      return a.slice(0,1)
     }else{
       return a
     }
@@ -25,12 +33,12 @@ function App() {
     return (
       <>
         <div>
-          <h1>{texto}</h1>
+          <span>{texto}</span>
           <div>
-            <button onClick={()=>{setTexto(definirNota(Nota))}}>
+            <button onClick={()=>{setTexto(definirNota(Nota,true))}}>
               {definirNota(Nota,true)}
             </button>
-            <button onClick={()=>{setTexto(definirNota(Nota+'#'))}}>
+            <button onClick={()=>{setTexto(definirNota(Nota+'#',false))}}>
               {definirNota(Nota+'#',false)}
             </button>
           </div>
@@ -42,6 +50,10 @@ const listaCards = intervalos.Intervalos.map(grado=> <Card key={grado} Nota={gra
   return (
     <>
       <ComponenteDePrueba Nombre={intervalos.Nombre}></ComponenteDePrueba>
+      <select id='tipoEscala'>
+        <option value='Escala Mayor'>Escala Mayor</option>
+        <option value="Escala Menor">Escala Menor</option>
+      </select>
       <div className='cards'>
         {listaCards}
       </div>
