@@ -4,11 +4,11 @@ import { ComponenteDePrueba } from './components/ComponenteDePrueba'
 import { listaEscalas } from '../public/data/listaEscalas';
 
 function App() {
-  const [intervalos, setIntervalos] = useState({...listaEscalas[Math.floor(Math.random()*(0 - 14)+14)]});
+  const [dataescala, setDataescala] = useState({...listaEscalas[Math.floor(Math.random()*(0 - 14)+14)]});
   const cambiarEscala = () => {
     const varAux = Math.floor(Math.random()*(0 - 14)+14)
     if(listaEscalas[varAux].Tipo == document.getElementById('tipoEscala').value && listaEscalas[varAux].Nombre != listaEscalas.Nombre){
-      setIntervalos({...listaEscalas[varAux]});
+      setDataescala({...listaEscalas[varAux]});
     }else{
       cambiarEscala();
     }
@@ -46,13 +46,19 @@ function App() {
       </>
     )
   };
-const listaCards = intervalos.Intervalos.map(grado=> <Card key={grado} Nota={grado}></Card>);
+  
+  const listaCards = dataescala.Intervalos.map(grado=> <Card key={grado} Nota={grado}></Card>);
+
   return (
     <>
-      <ComponenteDePrueba Nombre={intervalos.Nombre}></ComponenteDePrueba>
+      <ComponenteDePrueba Nombre={dataescala.Nombre}></ComponenteDePrueba>
       <select id='tipoEscala'>
         <option value='Escala Mayor'>Escala Mayor</option>
         <option value="Escala Menor">Escala Menor</option>
+      </select>
+      <select id='notasAcordes'>
+        <option value='Notas'>Notas</option>
+        <option value="Acordes">Acordes</option>
       </select>
       <div className='cards'>
         {listaCards}
