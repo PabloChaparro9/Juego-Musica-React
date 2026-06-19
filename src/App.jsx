@@ -4,68 +4,68 @@ import { ComponenteDePrueba } from './components/ComponenteDePrueba'
 import { listaEscalas } from '../public/data/listaEscalas';
 
 function App() {
-  const [dataescala, setDataescala] = useState({...listaEscalas[Math.floor(Math.random()*(0 - 14)+14)]});
+  const [dataescala, setDataescala] = useState({ ...listaEscalas[Math.floor(Math.random() * (0 - 14) + 14)] });
   const [intervalos, setIntervalos] = useState([...dataescala.Intervalos]);
   const cambiarEscala = () => {
     const NotasAcordesValue = document.getElementById('notasAcordes').value;
-    const varAux = Math.floor(Math.random()*(0 - 14)+14)
-    if(listaEscalas[varAux].Tipo == document.getElementById('tipoEscala').value && listaEscalas[varAux].Nombre != listaEscalas.Nombre){
-      setDataescala({...listaEscalas[varAux]});
-      if(NotasAcordesValue == 'Notas'){
+    const varAux = Math.floor(Math.random() * (0 - 14) + 14)
+    if (listaEscalas[varAux].Tipo == document.getElementById('tipoEscala').value && listaEscalas[varAux].Nombre != listaEscalas.Nombre) {
+      setDataescala({ ...listaEscalas[varAux] });
+      if (NotasAcordesValue == 'Notas') {
         setIntervalos(dataescala.Intervalos);
-      }else{
+      } else {
         setIntervalos(dataescala.Acordes);
       }
-    }else{
+    } else {
       cambiarEscala();
     }
   }
-  const definirNota = (a, b)=>{
+  const definirNota = (a, b) => {
     const NotasAcordesValue = document.getElementById('notasAcordes').value;
-    if(NotasAcordesValue == 'Notas'){
-      if((a.slice(-1) == 'b' && b == false) || (a.slice(-1) == '#' && b == true)){
-        return a.slice(0,1)
-      }else if(a.slice(-1) != '#' && b == false){
+    if (NotasAcordesValue == 'Notas') {
+      if ((a.slice(-1) == 'b' && b == false) || (a.slice(-1) == '#' && b == true)) {
+        return a.slice(0, 1)
+      } else if (a.slice(-1) != '#' && b == false) {
         return a + '#'
-      }else{
+      } else {
         return a
       }
-    }else{
-      if(a.slice(-1) == '°' && b == true){
-        return a.slice(0,1)+'°'
-      }else if(a.slice(-1) == 'm' && b == false){
-        return a.slice(0,1)
-      }else if(a.slice(-1) == '#' && b == true){
-        return a+'m'
-      }else if((a.slice(-1) == '°' && a.slice(-2) != '#°') && b == false){
-        return a.slice(0,1)+'#'+a.slice(1,2)
-      }else if((a.slice(-1) != '#' && a.slice(-1) != 'm' && a.slice(-1) != '°') && b == true){
-        return a+'m'
-      }else{
+    } else {
+      if (a.slice(-1) == '°' && b == true) {
+        return a.slice(0, 1) + '°'
+      } else if (a.slice(-1) == 'm' && b == false) {
+        return a.slice(0, 1)
+      } else if (a.slice(-1) == '#' && b == true) {
+        return a + 'm'
+      } else if ((a.slice(-1) == '°' && a.slice(-2) != '#°') && b == false) {
+        return a.slice(0, 1) + '#' + a.slice(1, 2)
+      } else if ((a.slice(-1) != '#' && a.slice(-1) != 'm' && a.slice(-1) != '°') && b == true) {
+        return a + 'm'
+      } else {
         return a
       }
     }
   }
-  const Card = ({Nota}) =>{
+  const Card = ({ Nota }) => {
     const [texto, setTexto] = useState(Nota);
     return (
       <>
         <div className='Card'>
           <span>{texto}</span>
           <div className='BtnContainer'>
-            <button className='CardBtn' onClick={()=>{setTexto(definirNota(Nota,true))}}>
-              {definirNota(Nota,true)}
+            <button className='CardBtn' onClick={() => { setTexto(definirNota(Nota, true)) }}>
+              {definirNota(Nota, true)}
             </button>
-            <button className='CardBtn' onClick={()=>{setTexto(definirNota(Nota,false))}}>
-              {definirNota(Nota,false)}
+            <button className='CardBtn' onClick={() => { setTexto(definirNota(Nota, false)) }}>
+              {definirNota(Nota, false)}
             </button>
           </div>
         </div>
       </>
     )
   };
-  
-  const listaCards = intervalos.map(grado=> <Card key={grado} Nota={grado}></Card>);
+
+  const listaCards = intervalos.map(grado => <Card key={grado} Nota={grado}></Card>);
 
   return (
     <>
