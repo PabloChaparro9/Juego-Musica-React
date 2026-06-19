@@ -5,25 +5,39 @@ import { listaEscalas } from '../public/data/listaEscalas';
 
 function App() {
   const [dataescala, setDataescala] = useState({...listaEscalas[Math.floor(Math.random()*(0 - 14)+14)]});
+  const [intervalos, setIntervalos] = useState([...dataescala.Intervalos]);
   const cambiarEscala = () => {
+    const NotasAcordesValue = document.getElementById('notasAcordes').value;
     const varAux = Math.floor(Math.random()*(0 - 14)+14)
     if(listaEscalas[varAux].Tipo == document.getElementById('tipoEscala').value && listaEscalas[varAux].Nombre != listaEscalas.Nombre){
       setDataescala({...listaEscalas[varAux]});
+      if(NotasAcordesValue == 'Notas'){
+        console.log(NotasAcordesValue)
+        setIntervalos(dataescala.Intervalos);
+      }else{
+        console.log(NotasAcordesValue)
+        setIntervalos(dataescala.Acordes);
+      }
     }else{
       cambiarEscala();
     }
   }
   const definirNota = (a, b)=>{
-    if(a.slice(-2) == '##' && b==true){
-      return a.slice(0,2)
-    }else if(a.slice(-1) == '#' && b==true){
-      return a.slice(0,1)
-    }else if(a.slice(-1) == 'b' && b==true){
-      return a
-    }else if (a.slice(-2)== '##' && b==false){
-      return a.slice(0,2)
-    }else if(a.slice(-2)== 'b#' && b==false){
-      return a.slice(0,1)
+    const NotasAcordesValue = document.getElementById('notasAcordes').value;
+    if(NotasAcordesValue == 'Notas'){
+      if(a.slice(-2) == '##' && b==true){
+        return a.slice(0,2)
+      }else if(a.slice(-1) == '#' && b==true){
+        return a.slice(0,1)
+      }else if(a.slice(-1) == 'b' && b==true){
+        return a
+      }else if (a.slice(-2)== '##' && b==false){
+        return a.slice(0,2)
+      }else if(a.slice(-2)== 'b#' && b==false){
+        return a.slice(0,1)
+      }else{
+        return a
+      }
     }else{
       return a
     }
@@ -47,7 +61,7 @@ function App() {
     )
   };
   
-  const listaCards = dataescala.Intervalos.map(grado=> <Card key={grado} Nota={grado}></Card>);
+  const listaCards = intervalos.map(grado=> <Card key={grado} Nota={grado}></Card>);
 
   return (
     <>
