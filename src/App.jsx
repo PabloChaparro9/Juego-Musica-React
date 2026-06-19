@@ -12,10 +12,8 @@ function App() {
     if(listaEscalas[varAux].Tipo == document.getElementById('tipoEscala').value && listaEscalas[varAux].Nombre != listaEscalas.Nombre){
       setDataescala({...listaEscalas[varAux]});
       if(NotasAcordesValue == 'Notas'){
-        console.log(NotasAcordesValue)
         setIntervalos(dataescala.Intervalos);
       }else{
-        console.log(NotasAcordesValue)
         setIntervalos(dataescala.Acordes);
       }
     }else{
@@ -25,16 +23,12 @@ function App() {
   const definirNota = (a, b)=>{
     const NotasAcordesValue = document.getElementById('notasAcordes').value;
     if(NotasAcordesValue == 'Notas'){
-      if(a.slice(-2) == '##' && b==true){
-        return a.slice(0,2)
-      }else if(a.slice(-1) == '#' && b==true){
+      if(a.slice(-1) == 'b' && b == false){
         return a.slice(0,1)
-      }else if(a.slice(-1) == 'b' && b==true){
-        return a
-      }else if (a.slice(-2)== '##' && b==false){
-        return a.slice(0,2)
-      }else if(a.slice(-2)== 'b#' && b==false){
+      }else if(a.slice(-1) == '#' && b == true){
         return a.slice(0,1)
+      }else if(a.slice(-1) != '#' && b == false){
+        return a + '#'
       }else{
         return a
       }
@@ -46,14 +40,14 @@ function App() {
     const [texto, setTexto] = useState(Nota);
     return (
       <>
-        <div>
+        <div className='Card'>
           <span>{texto}</span>
-          <div>
-            <button onClick={()=>{setTexto(definirNota(Nota,true))}}>
+          <div className='BtnContainer'>
+            <button className='CardBtn' onClick={()=>{setTexto(definirNota(Nota,true))}}>
               {definirNota(Nota,true)}
             </button>
-            <button onClick={()=>{setTexto(definirNota(Nota+'#',false))}}>
-              {definirNota(Nota+'#',false)}
+            <button className='CardBtn' onClick={()=>{setTexto(definirNota(Nota,false))}}>
+              {definirNota(Nota,false)}
             </button>
           </div>
         </div>
