@@ -9,3 +9,10 @@ body{
   width: 90%;
   border: none;
 }
+.BtnContainer{
+  display: flex;
+}
+.CardBtn{
+  width: 36px;
+  height: 36px;
+}
