@@ -23,9 +23,7 @@ function App() {
   const definirNota = (a, b)=>{
     const NotasAcordesValue = document.getElementById('notasAcordes').value;
     if(NotasAcordesValue == 'Notas'){
-      if(a.slice(-1) == 'b' && b == false){
-        return a.slice(0,1)
-      }else if(a.slice(-1) == '#' && b == true){
+      if((a.slice(-1) == 'b' && b == false) || (a.slice(-1) == '#' && b == true)){
         return a.slice(0,1)
       }else if(a.slice(-1) != '#' && b == false){
         return a + '#'
@@ -33,7 +31,19 @@ function App() {
         return a
       }
     }else{
-      return a
+      if(a.slice(-1) == '°' && b == true){
+        return a.slice(0,1)+'°'
+      }else if(a.slice(-1) == 'm' && b == false){
+        return a.slice(0,1)
+      }else if(a.slice(-1) == '#' && b == true){
+        return a+'m'
+      }else if((a.slice(-1) == '°' && a.slice(-2) != '#°') && b == false){
+        return a.slice(0,1)+'#'+a.slice(1,2)
+      }else if((a.slice(-1) != '#' && a.slice(-1) != 'm' && a.slice(-1) != '°') && b == true){
+        return a+'m'
+      }else{
+        return a
+      }
     }
   }
   const Card = ({Nota}) =>{
