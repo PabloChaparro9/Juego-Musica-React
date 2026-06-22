@@ -6,23 +6,25 @@ import { listaEscalas } from '../public/data/listaEscalas';
 function App() {
   const [dataescala, setDataescala] = useState({ ...listaEscalas[Math.floor(Math.random() * (0 - 14) + 14)] });
   const [intervalos, setIntervalos] = useState([...dataescala.Intervalos]);
-  const cambiarEscala = () => {
-    const NotasAcordesValue = document.getElementById('notasAcordes').value;
-    const varAux = Math.floor(Math.random() * (0 - 14) + 14)
-    if (listaEscalas[varAux].Tipo == document.getElementById('tipoEscala').value && listaEscalas[varAux].Nombre != listaEscalas.Nombre) {
-      setDataescala({ ...listaEscalas[varAux] });
-      if (NotasAcordesValue == 'Notas') {
-        setIntervalos(dataescala.Intervalos);
-      } else {
-        setIntervalos(dataescala.Acordes);
+  const [tipoEscala, setTipoEscala] = useState('Escala Mayor');
+  const [notasAcordes, setNotasAcordes] = useState('Notas');
+  const cambiarEscala = async (event) => {
+    const escala = event.get('tipoEscala');
+    const NoAc = event.get('notasAcordes');
+    const varAux = Math.floor(Math.random() * (0 - 14) + 14);
+    if (listaEscalas[varAux].Tipo == escala) {
+      setDataescala({...listaEscalas[varAux]})
+      if(NoAc == 'Notas'){
+        setIntervalos(dataescala.Intervalos)
+      }else{
+        setIntervalos(dataescala.Acordes)
       }
-    } else {
-      cambiarEscala();
+    }else{
+      await cambiarEscala(event)
     }
   }
   const definirNota = (a, b) => {
-    const NotasAcordesValue = document.getElementById('notasAcordes').value;
-    if (NotasAcordesValue == 'Notas') {
+    if (notasAcordes == 'Notas') {
       if ((a.slice(-1) == 'b' && b == false) || (a.slice(-1) == '#' && b == true)) {
         return a.slice(0, 1)
       } else if (a.slice(-1) != '#' && b == false) {
@@ -70,18 +72,20 @@ function App() {
   return (
     <>
       <ComponenteDePrueba Nombre={dataescala.Nombre}></ComponenteDePrueba>
-      <select id='tipoEscala'>
-        <option value='Escala Mayor'>Escala Mayor</option>
-        <option value="Escala Menor">Escala Menor</option>
-      </select>
-      <select id='notasAcordes'>
-        <option value='Notas'>Notas</option>
-        <option value="Acordes">Acordes</option>
-      </select>
+      <form action={cambiarEscala}>
+        <select name='tipoEscala'>
+          <option value='Escala Mayor'>Escala Mayor</option>
+          <option value="Escala Menor">Escala Menor</option>
+        </select>
+        <select name='notasAcordes'>
+          <option value='Notas'>Notas</option>
+          <option value="Acordes">Acordes</option>
+        </select>
+        <button type='submit'>Cambiar Escala</button>
+      </form>
       <div className='cards'>
         {listaCards}
       </div>
-      <button onClick={cambiarEscala}>Cambiar Escala</button>
     </>
   )
 }
