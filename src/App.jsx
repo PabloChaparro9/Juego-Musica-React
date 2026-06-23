@@ -8,43 +8,59 @@ function App() {
   const [intervalos, setIntervalos] = useState([...dataescala.Intervalos]);
   const [tipoEscala, setTipoEscala] = useState('Escala Mayor');
   const [notasAcordes, setNotasAcordes] = useState('Notas');
-  const cambiarEscala = async (event) => {
-    const escala = event.get('tipoEscala');
-    const NoAc = event.get('notasAcordes');
-    const varAux = Math.floor(Math.random() * (0 - 14) + 14);
-    if (listaEscalas[varAux].Tipo == escala) {
-      setDataescala({...listaEscalas[varAux]})
-      if(NoAc == 'Notas'){
-        setIntervalos(dataescala.Intervalos)
-      }else{
-        setIntervalos(dataescala.Acordes)
-      }
-    }else{
-      await cambiarEscala(event)
+  const cambiarEscala = (event) => {
+    const tipoSeleccionado = event.get('tipoEscala');
+    const notasAcordesSeleccionado = event.get('notasAcordes');
+    let varAux = Math.floor(Math.random() * (0 - 14) + 14);
+
+    while (listaEscalas[varAux].Tipo !== tipoSeleccionado) {
+      varAux = Math.floor(Math.random() * (0 - 14) + 14);
     }
+
+    const nuevaEscala = { ...listaEscalas[varAux] };
+
+    setTipoEscala(tipoSeleccionado);
+    setNotasAcordes(notasAcordesSeleccionado);
+    setDataescala(nuevaEscala);
+    setIntervalos(
+      notasAcordesSeleccionado === 'Notas'
+        ? [...nuevaEscala.Intervalos]
+        : [...nuevaEscala.Acordes]
+    );
   }
   const definirNota = (a, b) => {
+    const lastDigit = a.slice(-1);
+    const lastTwoDigits = a.slice(-2);
+    const baseNote = a.slice(0,1);
     if (notasAcordes == 'Notas') {
-      if ((a.slice(-1) == 'b' && b == false) || (a.slice(-1) == '#' && b == true)) {
-        return a.slice(0, 1)
-      } else if (a.slice(-1) != '#' && b == false) {
+      if ((lastDigit == 'b' && b == false) || (lastDigit == '#' && b == true)) {
+        return baseNote
+      } else if (lastDigit != '#' && b == false) {
         return a + '#'
       } else {
         return a
       }
     } else {
-      if (a.slice(-1) == '°' && b == true) {
-        return a.slice(0, 1) + '°'
-      } else if (a.slice(-1) == 'm' && b == false) {
-        return a.slice(0, 1)
-      } else if (a.slice(-1) == '#' && b == true) {
-        return a + 'm'
-      } else if ((a.slice(-1) == '°' && a.slice(-2) != '#°') && b == false) {
-        return a.slice(0, 1) + '#' + a.slice(1, 2)
-      } else if ((a.slice(-1) != '#' && a.slice(-1) != 'm' && a.slice(-1) != '°') && b == true) {
-        return a + 'm'
-      } else {
-        return a
+      if (b == true) {
+        if (lastDigit == '°') {
+          return baseNote + '°'
+        } else if (lastDigit == '#') {
+          return baseNote
+        } else if (lastDigit != '#' && lastDigit != 'm' && lastDigit != '°') {
+          return a + 'm'
+        } else {
+          return a
+        }
+      } else if (b == false) {
+        if (lastDigit == 'm' || lastTwoDigits == '#m') {
+          return baseNote
+        } else if (lastDigit == '°' && lastTwoDigits != '#°') {
+          return baseNote + '#' + a.slice(1, 2)
+        } else if (lastTwoDigits == '#°') {
+          return a
+        } else {
+          return a
+        }
       }
     }
   }
